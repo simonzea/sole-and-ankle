@@ -31,19 +31,24 @@ const ShoeCard = ({
       ? 'new-release'
       : 'default'
 
+
   return (
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
+        {variant === 'on-sale' && <SalePriceSales>Sale</SalePriceSales>}
+        {variant === 'new-release' && <SalePriceNew>Just Release!</SalePriceNew>}
         <ImageWrapper>
           <Image alt="" src={imageSrc} />
         </ImageWrapper>
         <Spacer size={12} />
         <Row>
           <Name>{name}</Name>
-          <Price>{formatPrice(price)}</Price>
+          {variant !== 'on-sale' ? <Price>{formatPrice(price)}</Price>: <Pricetext>{formatPrice(price)}</Pricetext>}
+
         </Row>
         <Row>
           <ColorInfo>{pluralize('Color', numOfColors)}</ColorInfo>
+          {variant === 'on-sale' && <PriceRed>{formatPrice(salePrice)}</PriceRed>}
         </Row>
       </Wrapper>
     </Link>
@@ -53,18 +58,30 @@ const ShoeCard = ({
 const Link = styled.a`
   text-decoration: none;
   color: inherit;
+  padding-right: 32px;
+  padding-bottom:62px;
+  flex: 1 1 344px;
 `;
 
-const Wrapper = styled.article``;
+
+
+
+const Wrapper = styled.article`
+position: relative;
+`;
 
 const ImageWrapper = styled.div`
   position: relative;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+width:100%;
+`;
 
 const Row = styled.div`
   font-size: 1rem;
+  display:flex;
+  justify-content: space-between;
 `;
 
 const Name = styled.h3`
@@ -74,13 +91,38 @@ const Name = styled.h3`
 
 const Price = styled.span``;
 
+const Pricetext = styled(Price) `
+text-decoration-line: line-through;
+`
+const PriceRed = styled(Price) `
+color: ${COLORS.primary};
+`
+
+
+
 const ColorInfo = styled.p`
   color: ${COLORS.gray[700]};
 `;
 
 const SalePrice = styled.span`
   font-weight: ${WEIGHTS.medium};
-  color: ${COLORS.primary};
+  color: ${COLORS.white};
+  padding: 7px 10px;
+  border-radius: 2px;
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  z-index:1;
 `;
+
+const SalePriceSales = styled(SalePrice)`
+  background-color: ${COLORS.primary};
+`;
+
+const SalePriceNew = styled(SalePrice)`
+  background-color: ${COLORS.secondary};
+`;
+
+
 
 export default ShoeCard;
